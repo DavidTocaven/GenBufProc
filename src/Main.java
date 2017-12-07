@@ -121,10 +121,10 @@ public class Main {
 			
 			
 			/*  Parcours de Tous Les eléments*/
-			for(AtomicComponent elem : atomicArray)// Pour tous les éléments dela simulation 
+			for(AtomicComponent elem : atomicArray)// Pour tous les éléments de la simulation 
 			{	
 				System.out.println(elem.getName() + ": Tr= " + elem.getTr());
-				if(elem.getTr()<tmin)// Si le Ta de l'élément est inférieur a tmin, 
+				if(elem.getTr()<tmin)// Si le Tr de l'élément est inférieur a tmin, 
 				{
 						tmin = elem.getTr()	;							// Alors je met a jour tmin, et je regarde 
 						imminentComponent.clear();												// si des composants imminents ont le meme tmin
@@ -136,6 +136,12 @@ public class Main {
 				{
 					imminentComponent.add(elem);
 				}
+				
+			}
+			for(AtomicComponent elem : atomicArray)// Pour tous les éléments de la simulation
+			{
+				
+				elem.setE(currentTime - elem.getTl());
 				
 			}
 			System.out.println("tmin("+tmin+")");
@@ -210,14 +216,15 @@ public class Main {
 				// temps interd d'evo = tps courant - temps final de simu - tps restant du compo
 				 if (asEvolute)
 				 {
-					b.setE(0);
+					//b.setE(0);
 					b.setTl(currentTime);
+					//elem.setTl(elem.getTl() - currentTime);
 					 b.setTr(b.getTa());						 // ancienne version : b.setTr(  b.getTa());
 				 }
 				 else
 				 {
 						b.setTr(b.getTr()-tmin);
-						b.setE(currentTime - b.getTl() );
+					//	b.setE( b.getTa() - b.getTr() ); //currentTime + b.getTl() 
 				 }
 
 				System.out.println(text+"\t fin:"+b);
