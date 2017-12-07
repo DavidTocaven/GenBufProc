@@ -60,6 +60,7 @@ public class Adder extends AtomicComponent{
 			x =  x0*k0+x1*k1+x2*k2+x3*k3;
 			real_varnames_var.put("x", x);
 			next_state = 1;
+			
 		}
 		else if(current_state == 1 && (inputs.contains("step1_s0") || inputs.contains("step2_s0") || inputs.contains("step3_s0") || inputs.contains("step4_s0")) ){
 			if(real_inputnames_input.containsKey("step1_s0") == true)
@@ -75,6 +76,7 @@ public class Adder extends AtomicComponent{
 			next_state = 1;
 		}
 		current_state = next_state;
+		System.out.println("x0 " +x0 + " x1 " +x1 + " x2 " +x2 + " x3 " +x3);
 	}
 	
 	public void delta_con(ArrayList<String> inputs){
