@@ -20,27 +20,27 @@ public class Main {
 		
 		//******Instantiation des composants atomiques ****** INSERER ICI VOS COMPOSANTS
 		
-//		Step1 step1 = new Step1("step1");
-//		Step2 step2 = new Step2("step2");
-//		Step3 step3 = new Step3("step3");
-//		Step4 step4 = new Step4("step4");
-//		Adder adder = new Adder("adder");
-//		Euler euler = new Euler("euler");
+		Step1 step1 = new Step1("step1");
+		Step2 step2 = new Step2("step2");
+		Step3 step3 = new Step3("step3");
+		Step4 step4 = new Step4("step4");
+		Adder adder = new Adder("adder");
+		Euler euler = new Euler("euler");
 // 		Qss qss = new Qss("qss");  // TODO
-		Buf  buf  = new Buf("Buf");
-		Gen  gen  = new Gen("Gen");
-		Proc proc = new Proc("Proc");
-		//components.add(step1);
-		//components.add(step2);
-		//components.add(step3);
-		//components.add(step4);
-		//components.add(adder);
-		//components.add(euler);
+		//Buf  buf  = new Buf("Buf");
+		//Gen  gen  = new Gen("Gen");
+		//Proc proc = new Proc("Proc");
 		
-		//components.add(qss); // TODO
-		atomicArray.add(buf);
-		atomicArray.add(gen);
-		atomicArray.add(proc);
+		atomicArray.add(step1);
+		atomicArray.add(step2);
+		atomicArray.add(step3);
+		atomicArray.add(step4);
+		atomicArray.add(adder);
+		atomicArray.add(euler);
+		//atomicArray.add(qss); // TODO
+		//atomicArray.add(buf);
+		//atomicArray.add(gen);
+		//atomicArray.add(proc);
 		
 		
 		// Création du Frame Chart   METTRE UN TITRE
