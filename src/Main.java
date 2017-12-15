@@ -3,9 +3,18 @@ import java.util.HashMap;
 
 import chart.*;
 import model.*;
+// M2 ISTR - 2017/2018 -
+// Groupe Etudians : 
+//					Lucien RAKOTOMALALA
+//					David TOCAVEN
 
 
 
+
+
+////////////////////////////////////////////////////////////////////
+// Hébergé sur GitHub : https://github.com/DavidTocaven/GenBufProc
+////////////////////////////////////////////////////////////////////
 
 public class Main {
 /****************************** Main *********************************************/
@@ -28,7 +37,7 @@ public class Main {
 		Adder adder = new Adder("adder");
 		Euler euler = new Euler("euler");
 		
-		//Qss qss = new Qss("qss");  // TODO
+		//Qss qss = new Qss("qss");  
 		//Buf  buf  = new Buf("Buf");
 		//Gen  gen  = new Gen("Gen");
 		//Proc proc = new Proc("Proc");
@@ -40,7 +49,7 @@ public class Main {
 		atomicArray.add(step4);
 		atomicArray.add(adder);
 		atomicArray.add(euler);
-		//atomicArray.add(qss); // TODO
+		//atomicArray.add(qss); 
 		//atomicArray.add(buf);
 		//atomicArray.add(gen);
 		//atomicArray.add(proc);
@@ -101,11 +110,7 @@ public class Main {
 		
 		//*************************** BOUCLE DE SIMULATION *********************************
 		while(currentTime < tfin)
-		{
-
-			System.out.println("****************"); // TODO DEBUB
-			System.out.println("currentTime=" + currentTime); // TODO DEBUB
-			
+		{	
 			//Envoie des donnÃ©es aux charts ******NE PAS MODIFIER********
 			for(String var : integer_variables)
 				vars_chart.get(var).addDataToSeries(currentTime, vars_atom.get(var).getIntegerValue(var));
@@ -114,7 +119,6 @@ public class Main {
 				vars_chart.get(var).addDataToSeries(currentTime, vars_atom.get(var).getRealValue(var));
 
 			// *********************************************************************************
-			System.out.println("\n   Current time = "+ currentTime); // TODO DEBUB
 			ArrayList<AtomicComponent> imminentComponent = new ArrayList<AtomicComponent>(); // liste des composants imminents
 			ArrayList<String> outputs = new ArrayList<String>(); // liste des sorties 
 			double tmin = Double.POSITIVE_INFINITY;		// tmin =  + l'infini
@@ -124,7 +128,6 @@ public class Main {
 			/*  Parcours de tous Les atomics components*/
 			for(AtomicComponent elem : atomicArray)// Pour tous les composants de la simulation 
 			{	
-				System.out.println(elem.getName() + ": Tr= " + elem.getTr()); // TODO DEBUB
 				if(elem.getTr()<tmin)// Si le Tr de l'atomic est inférieur à tmin  
 				{
 						tmin = elem.getTr()	;			// mise à jour de tmin 
@@ -141,17 +144,12 @@ public class Main {
 			{
 				elem.setE(currentTime - elem.getTl());	 // Temps du point intermédiaire = temps début de l'itération - temps actuel
 			}
-			
-			System.out.println("tmin("+tmin+")");// TODO DEBUB
-			System.out.println("Liste des éléments imminents : ");// TODO DEBUB
 			HashMap<String, AtomicComponent> output_atom = new HashMap<>();   	// hasmap contenant les sorties des composants imminents et le 
 																				// composant atomque auquel elle appartient
 			ArrayList<String> output_of_component = new ArrayList<>();	// les sorties du composant
 			/* Exécution sortie des éléments imminents  */
-			System.out.println("Nb component imminent = "+imminentComponent.size());// TODO DEBUB
 			for(AtomicComponent i : imminentComponent) // pour tous les composants imminuents
 			{
-				System.out.println("\t"+i.getName() + ": lambda(S) : "+ i.lambda());// TODO DEBUB
 				outputs.addAll(i.lambda()); 	// Ajout de toutes les sorties du composants dans outputs 
 				output_of_component= i.lambda();  // les sorties du composants valent le lambda de l'imminent
 				for(String s : output_of_component) // pour tous les lambda de l'imminent
@@ -171,25 +169,20 @@ public class Main {
 						b.writeRealInputValue(s,
 											  output_atom.get(s).readRealOutputValue(s)); // ajout de la sortie
 						imputFree = false;
-						System.out.println(b.getName()+":"+s+" vient de " + output_atom.get(s).getName());// TODO DEBUB
-
 					}
 				}
-				String text = "début:"+b;// TODO DEBUG
 				boolean hasEvolute = false; // true = a évolué ; false = n'as pas évolué 
 				if(imminentComponent.contains(b))/*Si imminent*/
 				{
 					if( imputFree==true) /*si pas d'entrée(s)*/ 
 					{
 						b.delta_int(); // transitions internes 
-						System.out.println("Delta int de "+b.getName());// TODO DEBUB
 
 						hasEvolute=true;
 					}
 					else /* si entrée(s)*/
 					{
 						b.delta_con(outputs); // cas de conflict, choix de la prio décrit dans l'atomic component concerné
-						System.out.println("Delta con de "+b.getName());// TODO DEBUB
 
 						hasEvolute=true;
 					}
@@ -200,7 +193,6 @@ public class Main {
 						if(imputFree==false )/* si pas imminent && entrée*/ 
 						{
 							b.delta_ext(outputs);
-							System.out.println("Delta ext de "+b.getName());// TODO DEBUB
 							hasEvolute=true;
 						}
 					}
@@ -213,10 +205,7 @@ public class Main {
 				 else
 				 {
 					 b.setTr(b.getTr()-tmin); // Temps d'attente restant de l'atomique = Temps d'attente restant de l'atomique moins le temps écoulé  
-				 }
-
-				System.out.println(text+"\t fin:"+b);// TODO DEBUB
-	
+				 }	
 			}
 			currentTime += tmin; // mise à jours du temps courant.
 		}
