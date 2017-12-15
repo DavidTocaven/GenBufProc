@@ -3,19 +3,29 @@ import java.util.HashMap;
 
 import chart.*;
 import model.*;
+// M2 ISTR - 2017/2018 -
+// Groupe Etudians : 
+//					Lucien RAKOTOMALALA
+//					David TOCAVEN
 
 
 
+
+
+////////////////////////////////////////////////////////////////////
+// Hébergé sur GitHub : https://github.com/DavidTocaven/GenBufProc
+////////////////////////////////////////////////////////////////////
 
 public class Main {
-
-	public static void main(String args[]){
+/****************************** Main *********************************************/
+	public static void main(String args[])
+	{
 		
 		//Attention
 		//Les ports sont connectÃ©s par leur nom: pour connecter deux ports, ils doivent avoir le mÃªme nom
 		//Pour l'affichage des charts, deux composants ne peuvent pas avoir le mÃªme nom de variable
 		
-		
+		//
 		ArrayList<AtomicComponent> atomicArray = new ArrayList<>();
 		
 		//******Instantiation des composants atomiques ****** INSERER ICI VOS COMPOSANTS
@@ -26,18 +36,20 @@ public class Main {
 		Step4 step4 = new Step4("step4");
 		Adder adder = new Adder("adder");
 		Euler euler = new Euler("euler");
-// 		Qss qss = new Qss("qss");  // TODO
+		
+		//Qss qss = new Qss("qss");  
 		//Buf  buf  = new Buf("Buf");
 		//Gen  gen  = new Gen("Gen");
 		//Proc proc = new Proc("Proc");
-		
+		// 
+		// ajout des atomic dans le modèle
 		atomicArray.add(step1);
 		atomicArray.add(step2);
 		atomicArray.add(step3);
 		atomicArray.add(step4);
 		atomicArray.add(adder);
 		atomicArray.add(euler);
-		//atomicArray.add(qss); // TODO
+		//atomicArray.add(qss); 
 		//atomicArray.add(buf);
 		//atomicArray.add(gen);
 		//atomicArray.add(proc);
@@ -93,17 +105,12 @@ public class Main {
 		
 		//**************************************************
 		
-		double currentTime = 0; // t 
-		double tn = 0;
-		double tfin = 2;
+		double currentTime = 0; // t : le temps présent
+		double tfin = 2; // Durée de la simulation
 		
-		//BOUCLE DE SIMULATION
+		//*************************** BOUCLE DE SIMULATION *********************************
 		while(currentTime < tfin)
-		{
-
-			System.out.println("****************");
-			System.out.println("currentTime=" + currentTime);
-			
+		{	
 			//Envoie des donnÃ©es aux charts ******NE PAS MODIFIER********
 			for(String var : integer_variables)
 				vars_chart.get(var).addDataToSeries(currentTime, vars_atom.get(var).getIntegerValue(var));
@@ -112,59 +119,49 @@ public class Main {
 				vars_chart.get(var).addDataToSeries(currentTime, vars_atom.get(var).getRealValue(var));
 
 			// *********************************************************************************
-			// Provient de l'exo 1
-			System.out.println("\n   Current time = "+ currentTime);
-			ArrayList<AtomicComponent> imminentComponent = new ArrayList<AtomicComponent>();
-			ArrayList<String> outputs = new ArrayList<String>();
-			double tmin = Double.POSITIVE_INFINITY;		// tmin a l'infini
+			ArrayList<AtomicComponent> imminentComponent = new ArrayList<AtomicComponent>(); // liste des composants imminents
+			ArrayList<String> outputs = new ArrayList<String>(); // liste des sorties 
+			double tmin = Double.POSITIVE_INFINITY;		// tmin =  + l'infini
 			
 			
 			
-			/*  Parcours de Tous Les eléments*/
-			for(AtomicComponent elem : atomicArray)// Pour tous les éléments de la simulation 
+			/*  Parcours de tous Les atomics components*/
+			for(AtomicComponent elem : atomicArray)// Pour tous les composants de la simulation 
 			{	
-				System.out.println(elem.getName() + ": Tr= " + elem.getTr());
-				if(elem.getTr()<tmin)// Si le Tr de l'élément est inférieur a tmin, 
+				if(elem.getTr()<tmin)// Si le Tr de l'atomic est inférieur à tmin  
 				{
-						tmin = elem.getTr()	;							// Alors je met a jour tmin, et je regarde 
-						imminentComponent.clear();												// si des composants imminents ont le meme tmin
-						imminentComponent.add(elem)	;																	// Alors j'ajoute l'élément aux composant iminents
-						
-							
+						tmin = elem.getTr()	;			// mise à jour de tmin 
+						imminentComponent.clear(); 		// remplacement du/des composant(s) le plus imminent par celui-ci  		
+						imminentComponent.add(elem)	;	
 				}
-				else if(elem.getTr()==tmin)// TODO Ta 
+				else if(elem.getTr()==tmin)// si des composants imminents ont le même tmin
 				{
-					imminentComponent.add(elem);
+					imminentComponent.add(elem); // Alors j'ajoute l'élément aux composants iminents
 				}
-				
 			}
+			
 			for(AtomicComponent elem : atomicArray)// Pour tous les éléments de la simulation
 			{
-				
-				elem.setE(currentTime - elem.getTl());
-				
+				elem.setE(currentTime - elem.getTl());	 // Temps du point intermédiaire = temps début de l'itération - temps actuel
 			}
-			System.out.println("tmin("+tmin+")");
-			System.out.println("Liste des éléments imminents : ");
-			HashMap<String, AtomicComponent> output_atom = new HashMap<>();
-			ArrayList<String> output_of_component = new ArrayList<>();
+			HashMap<String, AtomicComponent> output_atom = new HashMap<>();   	// hasmap contenant les sorties des composants imminents et le 
+																				// composant atomque auquel elle appartient
+			ArrayList<String> output_of_component = new ArrayList<>();	// les sorties du composant
 			/* Exécution sortie des éléments imminents  */
-			System.out.println("Nb component imminent = "+imminentComponent.size());
-			for(AtomicComponent i : imminentComponent) 
+			for(AtomicComponent i : imminentComponent) // pour tous les composants imminuents
 			{
-				System.out.println("\t"+i.getName() + ": lambda(S) : "+ i.lambda());
-				outputs.addAll(i.lambda());
-				output_of_component= i.lambda();
-				for(String s : output_of_component)
+				outputs.addAll(i.lambda()); 	// Ajout de toutes les sorties du composants dans outputs 
+				output_of_component= i.lambda();  // les sorties du composants valent le lambda de l'imminent
+				for(String s : output_of_component) // pour tous les lambda de l'imminent
 				{
-					output_atom.put(s, i);
+					output_atom.put(s, i); // ajout dans output_atom pour lambda du composant imminent 
 				}
 			}
 			
 			/* Boucle pour delta --> TRANSITIONS */
-			for(AtomicComponent b : atomicArray) 		
+			for(AtomicComponent b : atomicArray) 	// pour tous les éléments	
 			{
-				Boolean imputFree=true;
+				Boolean imputFree=true; // true = pas d'entrée(s) ; false = des entrée(s)
 				for (String s : outputs) // pour toutes les sorties
 				{
 					if(b.getInputs().contains(s)) // si au moins une entrée de b est une sortie s active
@@ -172,68 +169,47 @@ public class Main {
 						b.writeRealInputValue(s,
 											  output_atom.get(s).readRealOutputValue(s)); // ajout de la sortie
 						imputFree = false;
-						System.out.println(b.getName()+":"+s+" vient de " + output_atom.get(s).getName());
-
 					}
 				}
-				String text = "début:"+b;
-//				ArrayList<String> c = new ArrayList<String>(b.getInputs()); // copies des entrées de b dans c
-//				c.retainAll(outputs); // garde dans c que les elements présent dans outputs
-				boolean asEvolute = false;
-				if(imminentComponent.contains(b))/*imminent*/
+				boolean hasEvolute = false; // true = a évolué ; false = n'as pas évolué 
+				if(imminentComponent.contains(b))/*Si imminent*/
 				{
-					if( imputFree==true) /*si vide : pas d'entrées*/  /*pas d'entrée*/
+					if( imputFree==true) /*si pas d'entrée(s)*/ 
 					{
-						b.delta_int();
-						System.out.println("Delta int de "+b.getName());
-						
-						asEvolute=true;
-					}
-					else /* entrée(s)*/
-					{
-						b.delta_con(outputs);
-						System.out.println("Delta con de "+b.getName());
+						b.delta_int(); // transitions internes 
 
-						asEvolute=true;
+						hasEvolute=true;
 					}
-				
-					
-					// mise a jour du temps si imminent
-				}
-				else
+					else /* si entrée(s)*/
 					{
-						if(imputFree==false )/* pas imminent && entrée*/ 
+						b.delta_con(outputs); // cas de conflict, choix de la prio décrit dans l'atomic component concerné
+
+						hasEvolute=true;
+					}
+									
+				}
+				else // si non imminent
+					{
+						if(imputFree==false )/* si pas imminent && entrée*/ 
 						{
 							b.delta_ext(outputs);
-							System.out.println("Delta ext de "+b.getName());
-
-							asEvolute=true;
+							hasEvolute=true;
 						}
-						// mise a jour du tr de tout les élements
 					}
 				
-				// e = currentTime - tfin - b.tr
-				// temps interd d'evo = tps courant - temps final de simu - tps restant du compo
-				 if (asEvolute)
+				 if (hasEvolute) // si au moins une transition a été franchie
 				 {
-					//b.setE(0);
-					b.setTl(currentTime);
-					//elem.setTl(elem.getTl() - currentTime);
-					 b.setTr(b.getTa());						 // ancienne version : b.setTr(  b.getTa());
+					 b.setTl(currentTime); // Temps de fin de l'itération de l'atomique = le temps courant
+					 b.setTr(b.getTa());   // Temps d'attente restant de l'atomique = temps actuel de l'actomique 
 				 }
 				 else
 				 {
-						b.setTr(b.getTr()-tmin);
-					//	b.setE( b.getTa() - b.getTr() ); //currentTime + b.getTl() 
-				 }
-
-				System.out.println(text+"\t fin:"+b);
-	
+					 b.setTr(b.getTr()-tmin); // Temps d'attente restant de l'atomique = Temps d'attente restant de l'atomique moins le temps écoulé  
+				 }	
 			}
-			currentTime += tmin;
-			// fin depuis l'exo 1
-			// *********************************************************************************
+			currentTime += tmin; // mise à jours du temps courant.
 		}
+		//*********************** FIN BOUCLE DE SIMULATION *********************************
 	}
 	
 	

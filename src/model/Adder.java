@@ -79,7 +79,6 @@ public class Adder extends AtomicComponent{
 			next_state = 1;
 		}
 		current_state = next_state;
-		System.out.println("x0 " +x0 + " x1 " +x1 + " x2 " +x2 + " x3 " +x3);
 	}
 	//*******************************************************************************
 	public void delta_con(ArrayList<String> inputs){
